@@ -915,79 +915,32 @@ function showError(msg, showAlt, url) {
 
 /* ===== METHOD 1: COBALT.TOOLS ===== */
 async function tryCobalt(url, quality, fmt) {
-  const body = {
-    url,
-    filenameStyle: 'pretty',
-    youtubeVideoCodec: 'h264',
-    downloadMode: fmt === 'audio' ? 'audio' : fmt === 'mute' ? 'mute' : 'auto',
-    ...(fmt !== 'audio' && { videoQuality: quality === 'max' ? '2160' : quality, youtubeHLS: false })
-  };
-
-  const res = await fetch('https://api.cobalt.tools/api/json', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(20000)
-  });
-
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.status === 'error') throw new Error(data.error?.code || data.error?.message || 'api_error');
-
-  const dlUrl = data.url || (Array.isArray(data.picker) && data.picker[0]?.url);
-  if (!dlUrl) throw new Error('no_url');
-  return dlUrl;
+  const response = await fetch(`/api/download?url=${encodeURIComponent(url)}&format=${fmt}&quality=${quality}`);
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.message || err.error || `HTTP ${response.status}`);
+  }
+  return response.json();
 }
 
-/* ===== METHOD 2: YT-DOWNLOAD.ORG API ===== */
-async function tryYtDownloadOrg(url, quality, fmt) {
-  const isAudio = fmt === 'audio';
-  const apiUrl = `https://yt-download.org/api/?url=${encodeURIComponent(url)}&format=${isAudio ? 'mp3' : 'mp4'}&quality=${quality === 'max' ? 'best' : quality}`;
-
-  const res = await fetch(apiUrl, {
-    signal: AbortSignal.timeout(20000),
-    headers: { 'Accept': 'application/json' }
-  });
-
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-
-  return data.download_url || data.url || data.link;
-}
-
-/* ===== METHOD 3: GETYT.IO API ===== */
-async function tryGetYtIo(url, fmt) {
-  const formData = new FormData();
-  formData.append('url', url);
-  formData.append('format', fmt === 'audio' ? 'mp3' : 'mp4');
-
-  const res = await fetch('https://getyt.io/api/download', {
-    method: 'POST',
-    body: formData,
-    signal: AbortSignal.timeout(20000)
-  });
-
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-
-  if (data.error) throw new Error(data.error);
-  return data.download_url || data.url;
-}
-
-/* ===== METHOD 4: LOWER QUALITY FALLBACK ===== */
+/* ===== METHOD 2: LOWER QUALITY FALLBACK ===== */
 async function tryCobaltLower(url, fmt) {
   const fallbackQualities = ['720', '480', '360'];
   for (const q of fallbackQualities) {
     try {
-      const dlUrl = await tryCobalt(url, q, fmt);
-      return { url: dlUrl, quality: q };
+      const result = await tryCobalt(url, q, fmt);
+      if (result.url || result.type === 'redirect') {
+        return { 
+          url: result.type === 'redirect' ? `/api/download?url=${encodeURIComponent(url)}&format=${fmt}&quality=${q}` : result.url, 
+          quality: q 
+        };
+      }
     } catch {}
   }
   throw new Error('all_qualities_failed');
 }
 
-/* ===== METHOD 5: ALTERNATIVE (Redirect to other services) ===== */
+/* ===== ALTERNATIVE (Redirect to other services) ===== */
 function tryAlternative(url) {
   const services = [
     'https://ssyoutube.com',
@@ -1017,64 +970,62 @@ async function startDownload() {
   const label = selectedFmt === 'audio' ? 'MP3 Audio' : selectedFmt === 'mute' ? 'MP4 (No Audio)' : 'MP4 Video';
   const ext   = selectedFmt === 'audio' ? 'mp3' : 'mp4';
 
-  const apiMethods = [
-    { name: 'Cobalt API', fn: () => tryCobalt(url, selectedQ, selectedFmt) },
-    { name: 'YT-Download.org', fn: () => tryYtDownloadOrg(url, selectedQ, selectedFmt) },
-    { name: 'GetYt.io', fn: () => tryGetYtIo(url, selectedFmt) }
-  ];
-
-  for (const api of apiMethods) {
-    try {
-      setLoading(`Trying ${api.name} (${selectedFmt === 'audio' ? 'MP3' : selectedQ + 'p'})…`);
-      const dlUrl = await api.fn();
-      showSuccess(dlUrl, label, ext, vidId);
-      return;
-    } catch (e) {
-      console.warn(`${api.name} failed:`, e);
-    }
-  }
-
-  if (selectedFmt !== 'audio' && selectedQ !== '360') {
-    try {
-      setLoading('High quality unavailable, trying lower resolution via Cobalt…');
-      const res = await tryCobaltLower(url, selectedFmt);
-      showSuccess(res.url, `${label} (${res.quality}p)`, ext, vidId);
-      return;
-    } catch (e) {
-      console.warn('Lower quality fallback failed:', e);
-    }
-  }
-
   try {
-    setLoading('Trying HLS stream method…');
-    const body = {
-      url,
-      downloadMode: selectedFmt === 'audio' ? 'audio' : 'auto',
-      filenameStyle: 'pretty',
-      youtubeHLS: true,
-      youtubeVideoCodec: 'h264',
-      ...(selectedFmt !== 'audio' && { videoQuality: '720' })
-    };
-    const res = await fetch('https://api.cobalt.tools/api/json', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(20000)
+    setLoading(`Fetching download options…`);
+    const backendUrl = `/api/download?url=${encodeURIComponent(url)}&format=${selectedFmt}&quality=${selectedQ}`;
+    const result = await fetch(backendUrl, { 
+      signal: AbortSignal.timeout(30000) 
+    }).then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
     });
-    const data = await res.json();
-    const dlUrl = data.url || (data.picker && data.picker[0]?.url);
-    if (dlUrl) { showSuccess(dlUrl, label + ' (HLS)', ext, vidId); return; }
+
+    if (result.error) {
+      throw new Error(result.message || result.error);
+    }
+
+    if (result.type === 'redirect') {
+      // For stream-based APIs, create a download link that opens the stream
+      showDirectDownload(result.url, label, ext, vidId);
+    } else if (result.url) {
+      showSuccess(result.url, label, ext, vidId);
+    } else {
+      throw new Error('No download URL returned');
+    }
   } catch (e) {
-    console.warn('HLS fallback failed:', e);
+    console.error('Download failed:', e);
+    
+    // Try lower quality fallback for video
+    if (selectedFmt !== 'audio' && selectedQ !== '360') {
+      try {
+        setLoading('High quality unavailable, trying lower resolution…');
+        const fallbackUrl = `/api/download?url=${encodeURIComponent(url)}&format=${selectedFmt}&quality=720`;
+        const result = await fetch(fallbackUrl).then(r => r.json());
+        if (result.url || result.type === 'redirect') {
+          showDirectDownload(result.type === 'redirect' ? fallbackUrl : result.url, `${label} (720p)`, ext, vidId);
+          return;
+        }
+      } catch {}
+    }
+
+    // All methods failed
+    showError('All download methods failed. This video may be restricted (age-gated, private, region-locked) or too long.', true, url);
+  } finally {
+    btn.disabled = false; btn.textContent = '⬇ Download';
   }
+}
 
-  const errCode = 'unknown';
-  let msg = 'All download methods failed. ';
-  msg += 'This video may be restricted (age-gated, private, region-locked) or too long. ';
-  msg += 'Click below to try an alternative service.';
-  showError(msg, true, url);
-
-  btn.disabled = false; btn.textContent = '⬇ Download';
+function showDirectDownload(dlUrl, label, ext, vidId) {
+  const thumb = vidId ? `<img class="result-thumb" src="https://img.youtube.com/vi/${vidId}/mqdefault.jpg" alt="thumb" loading="lazy">` : '';
+  document.getElementById('result-area').innerHTML = `
+    <div class="result-card">
+      ${thumb}
+      <div class="result-info">
+        <div class="result-title">✅ ${escHtml(label)} is ready!</div>
+        <div class="result-meta">Click the button to download (stream will start automatically)</div>
+      </div>
+      <a class="btn-dl-link" href="${escHtml(dlUrl)}" target="_blank" rel="noopener noreferrer">⬇ Save ${escHtml(ext.toUpperCase())}</a>
+    </div>`;
 }
 
 /* ===== FAQ ACCORDION ===== */

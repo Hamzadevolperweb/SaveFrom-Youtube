@@ -1,0 +1,22 @@
+{
+  "name": "youtube-downloader-api",
+  "version": "1.0.0",
+  "description": "Backend API for YouTube video downloads",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "yt-dlp": "^2024.7.0",
+    "express": "^4.18.0",
+    "cors": "^2.8.5",
+    "ytdl-core": "^4.11.5"
+  },
+  "devDependencies": {
+    "vercel": "^34.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
