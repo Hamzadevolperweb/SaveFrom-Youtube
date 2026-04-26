@@ -915,38 +915,67 @@ function showError(msg, showAlt, url) {
 
 /* ===== METHOD 1: COBALT.TOOLS ===== */
 async function tryCobalt(url, quality, fmt) {
-  const body = { url, filenameStyle: 'pretty', youtubeVideoCodec: 'h264' };
+  const body = {
+    url,
+    filenameStyle: 'pretty',
+    youtubeVideoCodec: 'h264',
+    downloadMode: fmt === 'audio' ? 'audio' : fmt === 'mute' ? 'mute' : 'auto',
+    ...(fmt !== 'audio' && { videoQuality: quality === 'max' ? '2160' : quality, youtubeHLS: false })
+  };
 
-  if (fmt === 'audio') {
-    body.downloadMode = 'audio';
-    body.audioFormat  = 'mp3';
-    body.audioBitrate = '128';
-  } else if (fmt === 'mute') {
-    body.downloadMode = 'mute';
-    body.videoQuality = quality === 'max' ? '2160' : quality;
-  } else {
-    body.downloadMode = 'auto';
-    body.videoQuality = quality === 'max' ? '2160' : quality;
-    body.youtubeHLS   = false;
-  }
-
-  const res = await fetch('https://api.cobalt.tools/', {
+  const res = await fetch('https://api.cobalt.tools/api/json', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(15000)
+    signal: AbortSignal.timeout(20000)
   });
 
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
-  if (data.status === 'error') throw new Error(data.error?.code || 'api_error');
+  if (data.status === 'error') throw new Error(data.error?.code || data.error?.message || 'api_error');
 
   const dlUrl = data.url || (Array.isArray(data.picker) && data.picker[0]?.url);
   if (!dlUrl) throw new Error('no_url');
   return dlUrl;
 }
 
-/* ===== METHOD 2: LOWER QUALITY FALLBACK ===== */
+/* ===== METHOD 2: YT-DOWNLOAD.ORG API ===== */
+async function tryYtDownloadOrg(url, quality, fmt) {
+  const isAudio = fmt === 'audio';
+  const apiUrl = `https://yt-download.org/api/?url=${encodeURIComponent(url)}&format=${isAudio ? 'mp3' : 'mp4'}&quality=${quality === 'max' ? 'best' : quality}`;
+
+  const res = await fetch(apiUrl, {
+    signal: AbortSignal.timeout(20000),
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+
+  return data.download_url || data.url || data.link;
+}
+
+/* ===== METHOD 3: GETYT.IO API ===== */
+async function tryGetYtIo(url, fmt) {
+  const formData = new FormData();
+  formData.append('url', url);
+  formData.append('format', fmt === 'audio' ? 'mp3' : 'mp4');
+
+  const res = await fetch('https://getyt.io/api/download', {
+    method: 'POST',
+    body: formData,
+    signal: AbortSignal.timeout(20000)
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+
+  if (data.error) throw new Error(data.error);
+  return data.download_url || data.url;
+}
+
+/* ===== METHOD 4: LOWER QUALITY FALLBACK ===== */
 async function tryCobaltLower(url, fmt) {
   const fallbackQualities = ['720', '480', '360'];
   for (const q of fallbackQualities) {
@@ -958,22 +987,21 @@ async function tryCobaltLower(url, fmt) {
   throw new Error('all_qualities_failed');
 }
 
-/* ===== METHOD 3: ALTERNATIVE (ssyoutube) ===== */
+/* ===== METHOD 5: ALTERNATIVE (Redirect to other services) ===== */
 function tryAlternative(url) {
-  try {
-    const u = new URL(url);
-    let altUrl;
-    if (u.hostname.includes('youtu.be')) {
-      altUrl = 'https://ssyoutube.com' + u.pathname + u.search;
-    } else {
-      altUrl = url.replace('youtube.com', 'ssyoutube.com');
-    }
-    window.open(altUrl, '_blank', 'noopener,noreferrer');
-    const ra = document.getElementById('result-area');
-    ra.innerHTML += `<div style="margin-top:8px;font-size:0.78rem;color:rgba(255,255,255,0.4);text-align:center;">Alternative site opened in new tab</div>`;
-  } catch {
-    showError('Could not open alternative. Please try manually.', false);
-  }
+  const services = [
+    'https://ssyoutube.com',
+    'https://ytmp3.cc',
+    'https://y2mate.com'
+  ];
+  const service = services[Math.floor(Math.random() * services.length)];
+  const u = new URL(url);
+  let altUrl;
+  if (u.hostname.includes('youtu.be')) altUrl = service + u.pathname + u.search;
+  else altUrl = url.replace('youtube.com', service.replace('https://', ''));
+  window.open(altUrl, '_blank', 'noopener,noreferrer');
+  const ra = document.getElementById('result-area');
+  ra.innerHTML += `<div style="margin-top:8px;font-size:0.78rem;color:rgba(255,255,255,0.4);text-align:center;">Alternative site opened in new tab</div>`;
 }
 
 /* ===== MAIN FUNCTION ===== */
@@ -989,51 +1017,64 @@ async function startDownload() {
   const label = selectedFmt === 'audio' ? 'MP3 Audio' : selectedFmt === 'mute' ? 'MP4 (No Audio)' : 'MP4 Video';
   const ext   = selectedFmt === 'audio' ? 'mp3' : 'mp4';
 
-  /* --- Attempt 1: Requested quality --- */
-  try {
-    setLoading(`Trying ${selectedFmt === 'audio' ? 'MP3' : selectedQ + 'p'} quality…`);
-    const dlUrl = await tryCobalt(url, selectedQ, selectedFmt);
-    showSuccess(dlUrl, label, ext, vidId);
-    return;
-  } catch (e1) {
-    if (selectedFmt !== 'audio' && selectedQ !== '360') {
-      /* --- Attempt 2: Auto-fallback to lower quality --- */
-      try {
-        setLoading('High quality unavailable, trying lower resolution…');
-        const res = await tryCobaltLower(url, selectedFmt);
-        showSuccess(res.url, `${label} (${res.quality}p)`, ext, vidId);
-        return;
-      } catch {}
-    }
-    /* --- Attempt 3: Try with HLS --- */
-    try {
-      setLoading('Trying alternative stream method…');
-      const body = { url, downloadMode: selectedFmt === 'audio' ? 'audio' : 'auto', filenameStyle: 'pretty', youtubeHLS: true, youtubeVideoCodec: 'h264' };
-      if (selectedFmt !== 'audio') body.videoQuality = '720';
-      const res = await fetch('https://api.cobalt.tools/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(15000)
-      });
-      const data = await res.json();
-      const dlUrl = data.url || (data.picker && data.picker[0]?.url);
-      if (dlUrl) { showSuccess(dlUrl, label + ' (HLS)', ext, vidId); return; }
-    } catch {}
+  const apiMethods = [
+    { name: 'Cobalt API', fn: () => tryCobalt(url, selectedQ, selectedFmt) },
+    { name: 'YT-Download.org', fn: () => tryYtDownloadOrg(url, selectedQ, selectedFmt) },
+    { name: 'GetYt.io', fn: () => tryGetYtIo(url, selectedFmt) }
+  ];
 
-    /* All methods failed — show actionable error */
-    const errCode = e1.message || '';
-    let msg = 'Download failed. ';
-    if (errCode.includes('age') || errCode.includes('sign'))       msg += 'This video may require sign-in or age verification.';
-    else if (errCode.includes('private'))                          msg += 'This video is private or removed.';
-    else if (errCode.includes('geo') || errCode.includes('region')) msg += 'This video is blocked in your region.';
-    else if (errCode.includes('live'))                             msg += 'Live streams cannot be downloaded.';
-    else if (errCode.includes('too_long'))                         msg += 'Video is too long to process.';
-    else                                                           msg += 'Please try a different video or use the alternative method below.';
-    showError(msg, true, url);
-  } finally {
-    btn.disabled = false; btn.textContent = '⬇ Download';
+  for (const api of apiMethods) {
+    try {
+      setLoading(`Trying ${api.name} (${selectedFmt === 'audio' ? 'MP3' : selectedQ + 'p'})…`);
+      const dlUrl = await api.fn();
+      showSuccess(dlUrl, label, ext, vidId);
+      return;
+    } catch (e) {
+      console.warn(`${api.name} failed:`, e);
+    }
   }
+
+  if (selectedFmt !== 'audio' && selectedQ !== '360') {
+    try {
+      setLoading('High quality unavailable, trying lower resolution via Cobalt…');
+      const res = await tryCobaltLower(url, selectedFmt);
+      showSuccess(res.url, `${label} (${res.quality}p)`, ext, vidId);
+      return;
+    } catch (e) {
+      console.warn('Lower quality fallback failed:', e);
+    }
+  }
+
+  try {
+    setLoading('Trying HLS stream method…');
+    const body = {
+      url,
+      downloadMode: selectedFmt === 'audio' ? 'audio' : 'auto',
+      filenameStyle: 'pretty',
+      youtubeHLS: true,
+      youtubeVideoCodec: 'h264',
+      ...(selectedFmt !== 'audio' && { videoQuality: '720' })
+    };
+    const res = await fetch('https://api.cobalt.tools/api/json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(20000)
+    });
+    const data = await res.json();
+    const dlUrl = data.url || (data.picker && data.picker[0]?.url);
+    if (dlUrl) { showSuccess(dlUrl, label + ' (HLS)', ext, vidId); return; }
+  } catch (e) {
+    console.warn('HLS fallback failed:', e);
+  }
+
+  const errCode = 'unknown';
+  let msg = 'All download methods failed. ';
+  msg += 'This video may be restricted (age-gated, private, region-locked) or too long. ';
+  msg += 'Click below to try an alternative service.';
+  showError(msg, true, url);
+
+  btn.disabled = false; btn.textContent = '⬇ Download';
 }
 
 /* ===== FAQ ACCORDION ===== */
