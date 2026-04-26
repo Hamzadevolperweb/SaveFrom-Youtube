@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============ SEO META TAGS ============ -->
+<title>Save From YouTube – Free YouTube Video Downloader | MP4 HD & MP3</title>
+<meta name="description" content="Save From YouTube – Download YouTube videos free in HD, Full HD, 4K MP4, or MP3. Fast, no registration, works on PC & mobile. The best YouTube video downloader online.">
+<meta name="keywords" content="save from youtube, youtube video downloader, download youtube videos, youtube to mp4, youtube to mp3, free youtube downloader, HD video download, youtube downloader online">
+<meta name="robots" content="index, follow">
+<meta name="author" content="SaveFromYT">
+<link rel="canonical" href="https://yourdomain.com/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Save From YouTube – Free HD Video Downloader">
+<meta property="og:description" content="Download YouTube videos instantly in HD, 4K MP4 or MP3. No registration needed. Fast & free!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourdomain.com/">
+<meta property="og:image" content="https://yourdomain.com/og-image.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Save From YouTube – Free Video Downloader">
+<meta name="twitter:description" content="Download YouTube videos free in MP4, HD, 4K or MP3. Fast, online, no software needed.">
+
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Save From YouTube",
+  "url": "https://yourdomain.com",
+  "description": "Free YouTube video downloader. Download YouTube videos in HD, Full HD, 4K MP4 or MP3 format.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #FF0000;
+    --red-glow: rgba(255,0,0,0.35);
+    --dark: #080810;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+    --text: #FFFFFF;
+    --muted: rgba(255,255,255,0.55);
+    --input-bg: rgba(255,255,255,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- ANIMATED BACKGROUND ---- */
+  .bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .bg-sphere {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .bs1 { width: 500px; height: 500px; background: rgba(255,0,0,0.18); top: -150px; left: -100px; animation-delay: 0s; }
+  .bs2 { width: 400px; height: 400px; background: rgba(120,0,200,0.12); top: 30%; right: -150px; animation-delay: -6s; }
+  .bs3 { width: 300px; height: 300px; background: rgba(255,0,0,0.1); bottom: 10%; left: 30%; animation-delay: -12s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.1); }
+  }
+
+  /* Grid lines */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ---- LAYOUT ---- */
+  .page { position: relative; z-index: 1; }
+
+  /* ---- NAV ---- */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    background: rgba(8,8,16,0.6);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px var(--red-glow);
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; fill: white; }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+
+  /* ---- HERO ---- */
+  .hero {
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,0,0,0.3);
+    color: #ff6666;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1.2rem;
+  }
+
+  h1 .accent {
+    background: linear-gradient(135deg, #FF0000, #FF6B6B, #FF0000);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer { 0%{background-position:0%} 100%{background-position:200%} }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+
+  /* ---- 3D PLAY BUTTON ---- */
+  .play3d-wrap {
+    perspective: 600px;
+    display: inline-flex;
+    margin-bottom: 3rem;
+  }
+
+  .play3d {
+    width: 90px;
+    height: 90px;
+    background: var(--red);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 20px 60px rgba(255,0,0,0.5),
+      0 8px 0 rgba(180,0,0,0.8),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+    transform: rotateX(15deg) rotateY(-10deg);
+    animation: float3d 4s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  .play3d svg { width: 36px; height: 36px; fill: white; margin-left: 5px; }
+
+  @keyframes float3d {
+    0%,100% { transform: rotateX(15deg) rotateY(-10deg) translateY(0); }
+    50%      { transform: rotateX(12deg) rotateY(-8deg) translateY(-8px); }
+  }
+
+  /* ---- DOWNLOAD TOOL ---- */
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .url-input {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    padding: 0 1.2rem;
+    height: 56px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .url-input::placeholder { color: rgba(255,255,255,0.3); }
+  .url-input:focus {
+    border-color: rgba(255,0,0,0.5);
+    box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+  }
+
+  .btn-download {
+    background: var(--red);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0 2rem;
+    height: 56px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(255,0,0,0.4), 0 3px 0 rgba(160,0,0,0.8);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-download:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255,0,0,0.5), 0 5px 0 rgba(120,0,0,0.8);
+  }
+  .btn-download:active { transform: translateY(1px); box-shadow: 0 4px 15px rgba(255,0,0,0.4), 0 1px 0 rgba(120,0,0,0.8); }
+  .btn-download:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Format tabs */
+  .format-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .fmt-tab {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .fmt-tab:hover { border-color: rgba(255,0,0,0.4); color: #fff; }
+  .fmt-tab.active {
+    background: rgba(255,0,0,0.15);
+    border-color: rgba(255,0,0,0.5);
+    color: #ff8888;
+  }
+
+  .q-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .q-btn:hover { border-color: rgba(255,0,0,0.3); color: #fff; }
+  .q-btn.active {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+  }
+
+  /* Result area */
+  #result-area { display: none; }
+  #result-area.visible { display: block; }
+
+  .result-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .result-thumb {
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .result-info { flex: 1; min-width: 140px; }
+  .result-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+  .result-meta { font-size: 0.78rem; color: var(--muted); }
+
+  .btn-dl-link {
+    background: #1db954;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(29,185,84,0.4);
+    transition: transform 0.15s;
+  }
+  .btn-dl-link:hover { transform: translateY(-1px); }
+
+  /* Status / error */
+  .status-msg {
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 1rem;
+  }
+  .status-loading { color: #aaa; }
+  .status-error { color: #ff6666; }
+
+  /* Spinner */
+  .spinner {
+    width: 22px; height: 22px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- STATS ---- */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+    max-width: 780px;
+    margin: 0 auto 5rem;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .stat-num span { color: var(--red); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* ---- HOW IT WORKS ---- */
+  .section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 3rem;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255,0,0,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .step-card:hover { transform: translateY(-6px); border-color: rgba(255,0,0,0.3); }
+
+  .step-num {
+    width: 48px; height: 48px;
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,0,0,0.3);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--red);
+    margin: 0 auto 1rem;
+  }
+
+  .step-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .step-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+  /* ---- FEATURES ---- */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .feat-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .feat-item:hover { border-color: rgba(255,0,0,0.3); }
+
+  .feat-icon {
+    width: 36px; height: 36px; min-width: 36px;
+    background: rgba(255,0,0,0.1);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .feat-text h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+  .feat-text p { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+
+  /* ---- FAQ ---- */
+  .faq-list { max-width: 700px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+  }
+  .faq-q::after { content: '+'; font-size: 1.3rem; color: var(--red); min-width: 20px; text-align: center; }
+  .faq-item.open .faq-q::after { content: '−'; }
+  .faq-a {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding-top: 0.75rem; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  footer a { color: rgba(255,255,255,0.4); text-decoration: none; margin: 0 0.5rem; }
+  footer a:hover { color: #fff; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .hero { padding: 4rem 1.25rem 2.5rem; }
+    h1 { letter-spacing: -1px; }
+    .tool-card { padding: 1.5rem; border-radius: 18px; }
+    .input-row { flex-direction: column; }
+    .btn-download { width: 100%; }
+    .stats { gap: 2rem; }
+    .section { padding: 0 1.25rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="bg-sphere bs1"></div>
+  <div class="bg-sphere bs2"></div>
+  <div class="bg-sphere bs3"></div>
+  <div class="grid-lines"></div>
+</div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+      </div>
+      SaveFrom<span style="color:var(--red)">YT</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How it Works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Free Forever · No Registration
+    </div>
+
+    <div class="play3d-wrap">
+      <div class="play3d">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+
+    <h1>Save From <span class="accent">YouTube</span><br>In Seconds</h1>
+
+    <p class="hero-sub">
+      Download YouTube videos free — MP4 HD, Full HD, 4K or MP3 audio.
+      No software. No redirects. Works on PC, Android & iPhone.
+    </p>
+  </section>
+
+  <!-- TOOL CARD -->
+  <div style="padding: 0 1rem;">
+    <div class="tool-card" role="main">
+
+      <!-- Format tabs -->
+      <div class="format-tabs" role="tablist" aria-label="Download format">
+        <button class="fmt-tab active" data-fmt="auto" role="tab" aria-selected="true">🎬 MP4 Video</button>
+        <button class="fmt-tab" data-fmt="audio" role="tab" aria-selected="false">🎵 MP3 Audio</button>
+        <button class="fmt-tab" data-fmt="mute" role="tab" aria-selected="false">🔇 No Audio</button>
+      </div>
+
+      <!-- Quality row -->
+      <div id="quality-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.2rem;">
+        <span style="font-size:0.8rem;color:var(--muted);line-height:32px;">Quality:</span>
+        <button class="q-btn active" data-q="1080">1080p HD</button>
+        <button class="q-btn" data-q="720">720p</button>
+        <button class="q-btn" data-q="480">480p</button>
+        <button class="q-btn" data-q="360">360p</button>
+        <button class="q-btn" data-q="max">Best</button>
+      </div>
+
+      <!-- URL Input -->
+      <div class="input-row">
+        <input
+          type="url"
+          id="ytUrl"
+          class="url-input"
+          placeholder="Paste YouTube video URL here…"
+          aria-label="YouTube video URL"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="btn-download" id="dlBtn" onclick="startDownload()">
+          ⬇ Download
+        </button>
+      </div>
+
+      <!-- Result Area -->
+      <div id="result-area" aria-live="polite"></div>
+
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats" aria-label="Usage statistics">
+    <div class="stat">
+      <div class="stat-num">50<span>M+</span></div>
+      <div class="stat-label">Videos Downloaded</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4<span>K</span></div>
+      <div class="stat-label">Max Resolution</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Free Always</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Registration Needed</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <h2 class="section-title">How to Save From YouTube</h2>
+    <p class="section-sub">Download any YouTube video in 3 simple steps</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Copy the URL</h3>
+        <p>Go to YouTube, open the video you want, and copy the URL from your browser's address bar.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Paste &amp; Choose Format</h3>
+        <p>Paste the link above. Select MP4 for video or MP3 for audio-only. Choose your quality.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Download &amp; Enjoy</h3>
+        <p>Click Download. Your file saves directly to your device. No redirects, no ads, no waiting.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <h2 class="section-title">Why Choose SaveFromYT</h2>
+    <p class="section-sub">Trusted by millions for fast, quality downloads</p>
+    <div class="features-grid">
+      <div class="feat-item">
+        <div class="feat-icon">🎬</div>
+        <div class="feat-text">
+          <h4>4K Ultra HD</h4>
+          <p>Download in 360p, 720p, 1080p, 2K or 4K resolution.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">🎵</div>
+        <div class="feat-text">
+          <h4>MP3 Extraction</h4>
+          <p>Extract high-quality audio from any YouTube video instantly.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-text">
+          <h4>Lightning Fast</h4>
+          <p>Optimized servers process your download in under 3 seconds.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">🔒</div>
+        <div class="feat-text">
+          <h4>No Login Needed</h4>
+          <p>100% anonymous. No account, no email, no personal data collected.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">📱</div>
+        <div class="feat-text">
+          <h4>All Devices</h4>
+          <p>Works perfectly on PC, Mac, Android, and iPhone browsers.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">🆓</div>
+        <div class="feat-text">
+          <h4>Always Free</h4>
+          <p>No hidden charges, no premium plans. SaveFromYT is 100% free.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know about SaveFromYT</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">How do I save from YouTube for free?</div>
+        <div class="faq-a">Simply paste your YouTube video URL into the input box above, choose your preferred format (MP4 or MP3), and click the Download button. SaveFromYT is completely free, with no registration required.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I download YouTube videos in HD?</div>
+        <div class="faq-a">Yes! SaveFromYT supports downloads in standard quality (360p, 480p), HD (720p), Full HD (1080p), 2K, and 4K — depending on what the original video offers.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I download YouTube Shorts?</div>
+        <div class="faq-a">Absolutely. Paste the YouTube Shorts URL and it works just like any other video. You'll get an MP4 file saved to your device.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is it safe to use this YouTube downloader?</div>
+        <div class="faq-a">Yes. We do not ask for any personal information, do not install any software on your device, and do not store your downloaded files. Your privacy is fully protected.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does it work on mobile phones?</div>
+        <div class="faq-a">Yes! SaveFromYT is fully mobile-friendly. It works in Chrome, Safari, Firefox, and all major browsers on Android and iPhone without any app installation.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the difference between MP4 and MP3 download?</div>
+        <div class="faq-a">MP4 downloads the video with audio. MP3 extracts only the audio track, perfect for saving music, podcasts, or lectures to listen offline.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO CONTENT -->
+  <section class="section" style="padding-bottom: 3rem;">
+    <div style="max-width: 700px; margin: 0 auto; color: var(--muted); font-size: 0.88rem; line-height: 1.8;">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;color:#fff;margin-bottom:0.8rem;">The Best Way to Save From YouTube</h2>
+      <p>SaveFromYT is the fastest and most reliable YouTube video downloader available online. Whether you want to save from YouTube to watch offline, extract music, or archive content, our tool handles it without any software installation. Simply copy the YouTube URL and paste it here — it works on every device and every major browser.</p>
+      <br>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;color:#fff;margin-bottom:0.8rem;">YouTube to MP4 Downloader</h2>
+      <p>Our YouTube to MP4 converter preserves the original quality of your video. We support all standard resolutions including 360p, 480p, 720p HD, 1080p Full HD, 2K, and 4K where available. Downloaded MP4 files are compatible with VLC, Windows Media Player, QuickTime, and all media players.</p>
+      <br>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;color:#fff;margin-bottom:0.8rem;">YouTube to MP3 – Free Audio Extraction</h2>
+      <p>Want just the audio? Use our YouTube to MP3 feature to extract high-quality audio from any YouTube video. Great for saving songs, podcast episodes, lectures, speeches, and ambient sounds for offline listening.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p style="margin-bottom:0.75rem;">
+      <a href="#">Home</a>
+      <a href="#how">How it Works</a>
+      <a href="#faq">FAQ</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </p>
+    <p>© 2025 SaveFromYT · Free YouTube Video Downloader · Download YouTube Videos in HD, MP4 &amp; MP3</p>
+    <p style="margin-top:0.4rem;font-size:0.75rem;opacity:0.5;">For personal use only. Respect YouTube's Terms of Service.</p>
+  </footer>
+
+</div>
+
+<script>
+/* ===== FORMAT TABS ===== */
+let selectedFmt = 'auto';
+let selectedQ   = '1080';
+
+document.querySelectorAll('.fmt-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+    tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+    selectedFmt = tab.dataset.fmt;
+    const qRow = document.getElementById('quality-row');
+    qRow.style.display = selectedFmt === 'audio' ? 'none' : 'flex';
+    clearResult();
+  });
+});
+
+/* ===== QUALITY BUTTONS ===== */
+document.querySelectorAll('.q-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedQ = btn.dataset.q;
+  });
+});
+
+/* ===== PASTE AUTO-DETECT ===== */
+document.getElementById('ytUrl').addEventListener('paste', () => {
+  setTimeout(() => { if (isYouTubeUrl(document.getElementById('ytUrl').value)) startDownload(); }, 150);
+});
+document.getElementById('ytUrl').addEventListener('keydown', e => { if (e.key === 'Enter') startDownload(); });
+
+/* ===== HELPERS ===== */
+function isYouTubeUrl(u) { return u && (u.includes('youtube.com') || u.includes('youtu.be')); }
+
+function extractVideoId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1).split('?')[0];
+    if (u.pathname.includes('/shorts/')) return u.pathname.split('/shorts/')[1].split('?')[0];
+    return u.searchParams.get('v');
+  } catch { return null; }
+}
+
+function escHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+function clearResult() { const r = document.getElementById('result-area'); r.classList.remove('visible'); r.innerHTML = ''; }
+
+function setLoading(msg) {
+  const ra = document.getElementById('result-area');
+  ra.classList.add('visible');
+  ra.innerHTML = `<div class="status-msg status-loading"><div class="spinner"></div>${escHtml(msg)}</div>`;
+}
+
+function showSuccess(dlUrl, label, ext, vidId) {
+  const thumb = vidId ? `<img class="result-thumb" src="https://img.youtube.com/vi/${vidId}/mqdefault.jpg" alt="thumb" loading="lazy">` : '';
+  document.getElementById('result-area').innerHTML = `
+    <div class="result-card">
+      ${thumb}
+      <div class="result-info">
+        <div class="result-title">✅ ${escHtml(label)} is ready!</div>
+        <div class="result-meta">Click the button to save your file</div>
+      </div>
+      <a class="btn-dl-link" href="${escHtml(dlUrl)}" target="_blank" rel="noopener noreferrer" download>⬇ Save ${escHtml(ext.toUpperCase())}</a>
+    </div>`;
+}
+
+function showError(msg, showAlt, url) {
+  const altBtn = showAlt && url
+    ? `<div style="margin-top:10px;">
+        <button onclick="tryAlternative('${escHtml(url)}')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:0.82rem;padding:8px 16px;cursor:pointer;font-family:inherit;">
+          🔄 Try Alternative Method
+        </button>
+       </div>`
+    : '';
+  const ra = document.getElementById('result-area');
+  ra.classList.add('visible');
+  ra.innerHTML = `<div class="status-msg status-error">⚠ ${escHtml(msg)}${altBtn}</div>`;
+}
+
+/* ===== METHOD 1: COBALT.TOOLS ===== */
+async function tryCobalt(url, quality, fmt) {
+  const body = { url, filenameStyle: 'pretty', youtubeVideoCodec: 'h264' };
+
+  if (fmt === 'audio') {
+    body.downloadMode = 'audio';
+    body.audioFormat  = 'mp3';
+    body.audioBitrate = '128';
+  } else if (fmt === 'mute') {
+    body.downloadMode = 'mute';
+    body.videoQuality = quality === 'max' ? '2160' : quality;
+  } else {
+    body.downloadMode = 'auto';
+    body.videoQuality = quality === 'max' ? '2160' : quality;
+    body.youtubeHLS   = false;
+  }
+
+  const res = await fetch('https://api.cobalt.tools/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(15000)
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.status === 'error') throw new Error(data.error?.code || 'api_error');
+
+  const dlUrl = data.url || (Array.isArray(data.picker) && data.picker[0]?.url);
+  if (!dlUrl) throw new Error('no_url');
+  return dlUrl;
+}
+
+/* ===== METHOD 2: LOWER QUALITY FALLBACK ===== */
+async function tryCobaltLower(url, fmt) {
+  const fallbackQualities = ['720', '480', '360'];
+  for (const q of fallbackQualities) {
+    try {
+      const dlUrl = await tryCobalt(url, q, fmt);
+      return { url: dlUrl, quality: q };
+    } catch {}
+  }
+  throw new Error('all_qualities_failed');
+}
+
+/* ===== METHOD 3: ALTERNATIVE (ssyoutube) ===== */
+function tryAlternative(url) {
+  try {
+    const u = new URL(url);
+    let altUrl;
+    if (u.hostname.includes('youtu.be')) {
+      altUrl = 'https://ssyoutube.com' + u.pathname + u.search;
+    } else {
+      altUrl = url.replace('youtube.com', 'ssyoutube.com');
+    }
+    window.open(altUrl, '_blank', 'noopener,noreferrer');
+    const ra = document.getElementById('result-area');
+    ra.innerHTML += `<div style="margin-top:8px;font-size:0.78rem;color:rgba(255,255,255,0.4);text-align:center;">Alternative site opened in new tab</div>`;
+  } catch {
+    showError('Could not open alternative. Please try manually.', false);
+  }
+}
+
+/* ===== MAIN FUNCTION ===== */
+async function startDownload() {
+  const url = document.getElementById('ytUrl').value.trim();
+  const btn  = document.getElementById('dlBtn');
+
+  if (!url) { showError('Please paste a YouTube URL first.', false); return; }
+  if (!isYouTubeUrl(url)) { showError('Please enter a valid YouTube URL (youtube.com or youtu.be).', false); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Processing…';
+  const vidId = extractVideoId(url);
+  const label = selectedFmt === 'audio' ? 'MP3 Audio' : selectedFmt === 'mute' ? 'MP4 (No Audio)' : 'MP4 Video';
+  const ext   = selectedFmt === 'audio' ? 'mp3' : 'mp4';
+
+  /* --- Attempt 1: Requested quality --- */
+  try {
+    setLoading(`Trying ${selectedFmt === 'audio' ? 'MP3' : selectedQ + 'p'} quality…`);
+    const dlUrl = await tryCobalt(url, selectedQ, selectedFmt);
+    showSuccess(dlUrl, label, ext, vidId);
+    return;
+  } catch (e1) {
+    if (selectedFmt !== 'audio' && selectedQ !== '360') {
+      /* --- Attempt 2: Auto-fallback to lower quality --- */
+      try {
+        setLoading('High quality unavailable, trying lower resolution…');
+        const res = await tryCobaltLower(url, selectedFmt);
+        showSuccess(res.url, `${label} (${res.quality}p)`, ext, vidId);
+        return;
+      } catch {}
+    }
+    /* --- Attempt 3: Try with HLS --- */
+    try {
+      setLoading('Trying alternative stream method…');
+      const body = { url, downloadMode: selectedFmt === 'audio' ? 'audio' : 'auto', filenameStyle: 'pretty', youtubeHLS: true, youtubeVideoCodec: 'h264' };
+      if (selectedFmt !== 'audio') body.videoQuality = '720';
+      const res = await fetch('https://api.cobalt.tools/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(15000)
+      });
+      const data = await res.json();
+      const dlUrl = data.url || (data.picker && data.picker[0]?.url);
+      if (dlUrl) { showSuccess(dlUrl, label + ' (HLS)', ext, vidId); return; }
+    } catch {}
+
+    /* All methods failed — show actionable error */
+    const errCode = e1.message || '';
+    let msg = 'Download failed. ';
+    if (errCode.includes('age') || errCode.includes('sign'))       msg += 'This video may require sign-in or age verification.';
+    else if (errCode.includes('private'))                          msg += 'This video is private or removed.';
+    else if (errCode.includes('geo') || errCode.includes('region')) msg += 'This video is blocked in your region.';
+    else if (errCode.includes('live'))                             msg += 'Live streams cannot be downloaded.';
+    else if (errCode.includes('too_long'))                         msg += 'Video is too long to process.';
+    else                                                           msg += 'Please try a different video or use the alternative method below.';
+    showError(msg, true, url);
+  } finally {
+    btn.disabled = false; btn.textContent = '⬇ Download';
+  }
+}
+
+/* ===== FAQ ACCORDION ===== */
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+
+</body>
+</html>
